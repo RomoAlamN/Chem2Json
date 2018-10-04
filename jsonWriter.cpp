@@ -6,16 +6,27 @@
 #include "stringUtils.hpp"
 #include <experimental/filesystem>
 
+void compileArray(std::string& out, const std::string& row, const std::vector<std::string> &parts){
+    out.append("\"" + row + "\": [");
+    StringUtils::join(out, parts, ",");
+    out.append("]");
+}
+
 std::vector<std::string> createJson(std::vector<std::string> rows,  std::vector<std::vector<std::string>> data, int col){
     std::vector<std::string> out;
     out.reserve(rows.size());
     for(int row = 0; row < rows.size(); row++){
-        std::string pStr;
-        pStr.append("\"");
-        pStr.append(rows[row]);
-        pStr.append("\": ");
-        pStr.append(data[row][col]);
-        out.push_back(pStr);
+        if(StringUtils::containsAny(data[row][col],"[:]")){
+            std::string datum = data[row][col];
+            StringUtils::shave(datum,"[]");
+            std::vector<std::string> parts;
+            StringUtils::split(parts, datum, ':');
+            std::string temp;
+            compileArray(temp, rows[row], parts);
+            out.push_back(temp);
+        }else {
+            out.push_back("\"" + rows[row] + "\": " + data[row][col]);
+        }
     }
     return out;
 }
