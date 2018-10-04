@@ -12,6 +12,7 @@
 class JsonWriter {
 private:
     std::string output;
+    std::string filename;
 public:
     void generate(ChemParser parser);
     std::string write();

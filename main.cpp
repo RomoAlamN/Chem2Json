@@ -5,10 +5,10 @@
 #include "include/CLI11.hpp"
 #include "stringUtils.hpp"
 #include "chemParser.hpp"
+#include "jsonWriter.hpp"
 
 int main(int argc, char *argv[]) {
-    std::cout << argc << std::endl;
-    if (argc != 2) {
+    if (!(argc == 2 && !StringUtils::startsWith(argv[1], "-"))) {
         CLI::App app{"Converts .chem to .json"};
         std::string files = "none.err";
         app.add_option("-f,--files",
@@ -25,13 +25,17 @@ int main(int argc, char *argv[]) {
             // ChemWriter writer;
             std::cout << "Parsing : " << file << std::endl;
             parser.parse(file);
-            std::cout << "Parsed!" << std::endl;
+            JsonWriter writer;
+            writer.generate(parser);
+            writer.write();
         }
     } else {
         std::cout << "Parsing : " << argv[1] << std::endl;
         ChemParser parser;
         parser.parse(argv[1]);
-        std::cout << "Parsed!" << std::endl;
+        JsonWriter writer;
+        writer.generate(parser);
+        writer.write();
     }
 
 

@@ -43,4 +43,16 @@ public:
     static void removeBeginning(std::string& data, unsigned int start){
         data = data.substr(start);
     }
+    static void appendJoin(std::string& base, const std::vector<std::string>& data, const std::string& join){
+        std::string append;
+        StringUtils::join(append, data, join);
+        base.append(append);
+    }
+    static void join(std::string& out, const std::vector<std::string>& data, const std::string& join){
+        for( auto& line : data){
+            out.append(line);
+            out.append(join);
+        }
+        out.erase(out.length()-join.length(), join.length());
+    }
 };

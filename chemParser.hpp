@@ -16,6 +16,7 @@ public:
     std::vector<std::string> rows;
     std::vector<std::vector<std::string>> data;
     std::string filename;
+    std::string path;
 
     void parse(std::string filename);
 private:
